@@ -1,11 +1,12 @@
 using UnityEngine;
-using System.Collections;  // Add this for IEnumerator
+using System.Collections;
 
 public class BallController : MonoBehaviour
 {
     [SerializeField] private float force = 1f;
     [SerializeField] private Transform ballAnchor;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private Transform launchIndicator;  // Add this line
 
     private bool isBallLaunched;
     private Rigidbody ballRB;
@@ -22,21 +23,24 @@ public class BallController : MonoBehaviour
     private void LaunchBall()
     {
         if (isBallLaunched) return;
-
         isBallLaunched = true;
+
         transform.parent = null;
         ballRB.isKinematic = false;
 
-        // Add a small physics update delay
-        StartCoroutine(ApplyForceNextFrame());
+        // Store the launch direction before starting coroutine
+        Vector3 launchDirection = launchIndicator.forward;
+
+        // Pass the direction to the coroutine
+        StartCoroutine(ApplyForceNextFrame(launchDirection));
+
+        // Hide the indicator
+        launchIndicator.gameObject.SetActive(false);
     }
 
-    private IEnumerator ApplyForceNextFrame()
+    private IEnumerator ApplyForceNextFrame(Vector3 direction)
     {
-        // Wait for the next physics update
         yield return new WaitForFixedUpdate();
-
-        // Now apply the force
-        ballRB.AddForce(transform.forward * force, ForceMode.Impulse);
+        ballRB.AddForce(direction * force, ForceMode.Impulse);
     }
 }
