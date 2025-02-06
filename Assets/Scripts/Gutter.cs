@@ -4,6 +4,9 @@ public class Gutter : MonoBehaviour
 {
     private void OnTriggerEnter(Collider triggeredBody)
     {
+        // Ensure only ball is taken into gutter
+        if (!triggeredBody.CompareTag("Ball")) return; 
+
         // Get the rigidbody of the ball
         Rigidbody ballRigidBody = triggeredBody.GetComponent<Rigidbody>();
 
