@@ -15,9 +15,16 @@ public class BallController : MonoBehaviour
     {
         ballRB = GetComponent<Rigidbody>();
         inputManager.OnSpacePressed.AddListener(LaunchBall);
+        ResetBall(); // Changed to call ResetBall instead of individual setup
+    }
+
+    public void ResetBall() // New reset method
+    {
+        isBallLaunched = false;
+        ballRB.isKinematic = true;
+        launchIndicator.gameObject.SetActive(true);
         transform.parent = ballAnchor;
         transform.localPosition = Vector3.zero;
-        ballRB.isKinematic = true;
     }
 
     private void LaunchBall()
