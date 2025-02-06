@@ -4,18 +4,19 @@ public class Gutter : MonoBehaviour
 {
     private void OnTriggerEnter(Collider triggeredBody)
     {
+        // Get the rigidbody of the ball
         Rigidbody ballRigidBody = triggeredBody.GetComponent<Rigidbody>();
-        if (ballRigidBody == null) return;
 
-        // If the ball is still kinematic, don't force its velocity:
-        if (ballRigidBody.isKinematic) return;
-
-        // For newer Unity versions that deprecate .velocity, use .linearVelocity
+        // Store the current velocity magnitude
         float velocityMagnitude = ballRigidBody.linearVelocity.magnitude;
+
+        // Reset both linear and angular velocity
         ballRigidBody.linearVelocity = Vector3.zero;
         ballRigidBody.angularVelocity = Vector3.zero;
 
-        ballRigidBody.AddForce(transform.forward * velocityMagnitude, ForceMode.VelocityChange);
+        // Add force in the gutter's forward direction
+        ballRigidBody.AddForce(transform.forward * velocityMagnitude,
+            ForceMode.VelocityChange);
     }
 }
 
